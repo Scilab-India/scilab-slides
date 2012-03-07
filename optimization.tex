@@ -1,0 +1,345 @@
+% { ( [
+\documentclass{beamer}
+% \documentclass[handout]{beamer}% to get rid of fancy frames, do \frame[plain]{
+\usepackage{beamerthemesplit}
+\usepackage{graphicx,graphics}
+
+
+
+%------------------------------------------------------
+\usepackage{latexsym,multicol}
+\usepackage{epsfig,epsf,colordvi,color}
+
+\usepackage{ulem}
+\definecolor{bluecol}{rgb}{0,0,1}
+\definecolor{blackcol}{rgb}{1,1,1}
+\definecolor{redcol}{rgb}{1,0,0}
+\newcommand{\blue}[1]{{\color{bluecol}#1}}
+\newcommand{\black}[1]{{\color{blackcol}#1}}
+\newcommand{\red}[1]{{\color{redcol}#1}}
+
+
+%--------------------------------------------------------
+\usetheme{Darmstadt}
+% \setbeamercovered{transparent}
+\title[Optimization] {Optimization in Scilab}
+\date{27 Dec, 2011}
+\author[Manas Das \& Anuradha Singhania]{Manas Das \& Anuradha Singhania}
+\institute[IIT-Bombay]{
+  \large Department of Electrical Engineering\\
+  Indian Institute of Technology Bombay\\
+  {FOSSEE}
+}
+%____________________________________________
+\newcommand{\deri}[1]{\mbox{$\frac{{\mathrm d}^{#1}}{{\mathrm d}t^{#1}}$}}
+\newcommand{\der}      {\deri{}}
+%____________________________________________
+\begin{document}
+%--------------------------------------------
+\frame[plain]{
+\titlepage
+}
+%--------------------------------------------
+\section*{Outline}
+\frame{
+\frametitle{Outline}
+\tableofcontents
+}
+%--------------------------------------------------------------
+\section{Scilab}
+\frame{ \frametitle{Today's focus}
+\begin{itemize}
+\item Scilab is free. \pause % Matlab costs a lakh (per educational license). \pause
+\item Matrix/loops syntax is similar to Matlab. \pause
+\item Scilab provides all basic and many advanced tools. \pause
+\item Today: Optimization in Scilab \alert{optim command}
+\end{itemize}
+}
+%----------------------------------------------------------------
+\section{Optimization}
+
+\frame{
+\frametitle{Optimization}
+\begin{itemize}
+\item Minimize/maximize some (more than one) objective function by
+varying decision variable
+\item Subject to constraints on functions of decision variables
+\item All engineering domains, economics  
+\item Vast area in itself
+\end{itemize}
+}
+
+\frame{ 
+\frametitle{Single Objective Optimization Problems}
+\begin{equation}
+\min_{x}~~ f(x)
+\end{equation}
+where $x$ is $n$ dimensional, $f(x)$ is a scalar, with/without
+\begin{itemize}
+\item Bound constraints: $x_L \leq x \leq x_U$
+\item Linear/Nonlinear equality constraints: $g(x)=b$
+\item Linear/Nonlinear inequality constraints: $g(x)\leq b$
+\end{itemize}
+Components of $x$ can be real, integer or binary. \\
+Find \alert{`Decision Variables'}: $x$ which minimize \alert{'Obj'}: $f$ 
+
+}
+
+
+\frame{
+\frametitle{Linear optimization with Linear constraints}
+\begin{itemize}
+\item Scilab function: \bf {karmarkar} \\
+Calling Sequence \\
+[x1]=\bf karmarkar(a,b,c,lb)
+\begin{itemize}{\tt
+\item a:matrix (n,p)
+\item b:n-vector
+\item c:p-vector
+\item lb:lower bound
+}
+\end{itemize}
+\item Also be solved in scilab using  linpro  function 
+\item linpro is in Quapro toolbox under Optimization in ATOMS,
+\item It can installed by command atomsInstall('Quapro')
+\end{itemize}
+}
+\frame{
+\frametitle{Linear optimization with Linear constraints}
+Example:- \\
+     Maximize \\
+     $ 3x_1 + x_2 + 3x_3 \\
+     for \\
+     2x_1 + x_2 + x_3 \le 2 \\
+     x_1 + 2x_2 + 3x_3 \le 5 \\
+     2x_1 + 2x_2 + x_3 \le 6 \\
+     x1, x2, x3 \ge 0 $\\
+}
+\frame{
+\frametitle{Quadratic with linear constraints}
+\begin{itemize}{\tt
+\item Scilab function: \bf {qp\_solve} \\
+\tt {Calling Sequence} \\
+[x1]=\bf [x [,iact [,iter [,f]]]]=qp\_solve(Q,p1,C1,b,me)
+\begin{itemize}{\tt
+\item Q:real positive definite symmetric matrix (dimension n x n).
+\itemp p- real (column) vector (dimension n)
+\item c:p - vector
+\item lb:lower bound
+\item me: number of equality constraints
+}
+\end{itemize}
+\item It can  also be solved in scilab using  quapro function.
+\item quapro is in Quapro toolbox under Optimization in ATOMS
+\item It can installed by command atomsInstall(quapro)
+}
+\end{itemize}
+}
+\frame{
+\frametitle{Quadratic with linear constraints}
+Example
+    Minimize \\
+     $ f(x) =  \frac{1}{2} x^T
+     \begin{bmatrix}
+         2 & 0 \\
+         0 & 2 \\
+     \end{bmatrix} 
+     x + 
+     \begin{bmatrix}
+         -2 \\
+         -2 \\
+     \end{bmatrix} ^ T x \\
+     for \\
+     x_1 + x_2 \ge 2 + \sqrt {2} \\
+     -x_1 + x_2 \ge -2 $ \\
+}
+\section{Other Optimization Tools in Scilab}
+\frame{
+\frametitle{Other Optimization Tools in Scilab: I}
+Native (built-in) functions in Scilab:
+\begin{itemize}
+\item fminsearch: Computes unconstrained minimum of a given function
+using the Nelder-Mead algorithm (simplex region search).
+\begin{itemize}
+\item Native (built-in function) to Scilab:
+\item Derivative free, relies on search
+\item Basic usage: [xopt,fopt]=fminsearch(costf,x0); costf should take
+x as input and return f as output
+\item Try minimizing $f(x)=x^2+5$ using fminsearch
+\end{itemize}
+\item neldermead: Computes minimum of a nonlinear function subject to
+bounds and nonlinear constraints
+\begin{itemize}
+\item Option for several types of search algorithms
+\end{itemize}
+\end{itemize}
+}
+\frame{
+\frametitle{Unconstrained  Non-linear}
+\begin{itemize}{\tt
+\item Scilab function: \bf {fminsearch} \\
+\tt {Calling Sequence} \\
+ x = fminsearch ( costf , x0 )
+\begin{itemize}{\tt
+\item costf:The cost function.
+\itemp x0:The initial guess.
+}
+\end{itemize}
+\item computes the unconstrained minimimum of given function with the Nelder-Mead algorithm.
+}
+\end{itemize}
+}
+
+\frame{
+\frametitle{Unconstrained  Non-linear}
+Example:
+$ f(x) = x_1^2 + x_2^2 + x_1 x_2 $
+}
+
+\section{``Optim" in Scilab}
+\frame{
+\frametitle{Optim command in Scilab}
+Simplified Call: 
+
+[fopt,xopt]=optim(costf,x0) \\
+where 
+\begin{itemize}
+\item $x0$: initial guess where minimum of f occurs, 
+\item $fopt$: the optimum (minimum) value, 
+\item $xopt$: where the optimum occurs, 
+\item $costf$: user specified (scilab) function to compute objective
+function (f) and/or its gradient (g) depending on the input integer flag
+``ind" as: 
+
+[f,g,ind]=costf(x,ind) 
+\end{itemize}
+}
+
+\frame{
+\frametitle{Simple example}
+$f(x)=x^2+10$ \\
+$g(x)=2x$ 
+
+\begin{itemize}
+\item Minimize $f(x)$ starting from $x0=10$.
+\item Write a function (example ``myfunction1.sci") which takes $x,ind$
+as input and returns $f,g,ind$ as output.
+\item Use ``optim" function to minimize.
+\item Answer: $fopt=10,xopt=0$. 
+\end{itemize}
+}
+
+
+\frame{
+\frametitle{Another example (Campbell et al., 2010) }
+\begin{equation*}
+f(x_1,x_2,x_3)=(x_1-x_3)^2 + 3(x_1+x_2+x_3-1)^2 + (x_1-x_3+1)^2
+\end{equation*}
+with gradient
+\begin{eqnarray*}
+g & = & [\frac{\partial f}{\partial x_1}, \frac{\partial
+f}{\partial x_2},\frac{\partial f}{\partial x_3}] \\
+& = & 
+[2(x_1-x_3)+6(x_1+x_2+x_3-1)+2(x_1-x_3+1), \\
+& & 6(x_1+x_2+x_3-1), -2(x_1-x_3)-2(x_1-x_3+1)+6(x_1+x_2+x_3-1)]
+\end{eqnarray*}
+}
+
+
+\frame{
+\frametitle{Exercise plan}
+\begin{itemize}
+\item Minimize the function starting with guess values $x0=[1,1,1]$.
+\item Write a function (example ``myfunction2.sci") which takes $x,ind$
+as input and returns $f,g,ind$ as output.
+\item Use ``optim" function to minimize.
+\item Answer: $xopt=[0.14,0.27,0.64],fopt=0.51$.
+\end{itemize}
+
+}
+
+
+
+\frame{
+\frametitle{Other options with optim}
+Several other options/features with optim
+\begin{itemize}
+\item Several optimization algorithms: quasi-newton, conjugate
+gradient, etc.
+\item Gradient computation using finite differences: ``NDcost" used
+with optim.
+\item Various stopping/diagnostic criteria: Maximum number of
+iterations, calls to costf, thresholds, etc.
+\item Use of ind to compute gradient only when required (save
+computational effort).
+\item help optim: to know more
+\end{itemize}
+}
+
+
+
+
+\frame{
+\frametitle{Other Optimization Tools in Scilab: II}
+Native (built-in) functions in Scilab: \\
+AI based algorithms
+\begin{itemize}
+\item Genetic algorithms: single objective optimization,
+multiobjective optimization, various implementations
+\item Simulated annealing 
+\end{itemize}
+}
+
+
+\frame{
+\frametitle{Optimization Toolboxes in Scilab}
+Can be installed easily (atoms or otherwise) or interfaces to them
+\begin{itemize}
+\item quapro: linear, quadratic programming ($Q$ not necessarily
+positive definite)
+\item IPopt, fsqp, lp\_solve, etc. 
+\end{itemize}
+Check ``http://atoms.scilab.org/categories/optimization"
+}
+
+\frame{
+\frametitle{Optimization Features available in Scilab}
+
+\begin{itemize}
+\item Nonlinear optimization with the \textbf{optim} function
+\item  Quadratic optimization with the  \textbf{qpsolve} function
+\item  Nonlinear least-square optimization with the  \textbf{lsqrsolve} function
+\item Semidefinite programming with the  \textbf{semidef} function
+\item Genetic algorithms with the  \textbf{optim\_ga} function
+\item Simulated annealing with the  \textbf{optim\_sa} function
+\item Linear matrix inequalities with the  \textbf{lmisolver} function
+\end{itemize}
+}
+\frame{
+\frametitle{Missing optimization features in Scilab}
+\texttt{A list of features which are not available in Scilab, but are available in toolboxes. }
+\begin{itemize}
+\item Integer parameter with linear objective solver and sparse matrices : currently available in
+                 \textbf{LPSOLVE} toolbox, based on the simplex method,
+\item Linear objective with sparse matrices : currently available in  \textbf{ LIPSOL}, based on interior
+               points method,
+\item Nonlinear objective and non linear constraints : currently available in interface to   \textbf{IPOPT}
+               toolbox, based on interior point methods,
+\item Nonlinear objective and non linear constraints : currently available in interface to  \textbf {CONMIN}
+               toolbox, based on method of feasible directions,
+\end{itemize}
+}
+
+
+\frame{
+References
+\begin{itemize}
+\item S. L. Campbell, J.P. Chancelier and R. Nikoukhah, ``Modeling and
+Simulation in Scilab/Scicos", Springer, 2006.
+\end{itemize}
+{\bf Thank You}
+}
+
+
+
+\end{document}
